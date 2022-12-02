@@ -1,7 +1,7 @@
 use std::fs;
 
 pub fn day1(){
-    let file_path = "input.txt";
+    let file_path = "day1.txt";
     println!("In file {}", file_path);
 
     let contents = fs::read_to_string(file_path)
