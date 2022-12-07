@@ -29,7 +29,6 @@ pub fn day6() {
 			},
 			None => {
 				buffer.push(ch);
-
 			},
 		}
 		//println!("{:?}", buffer);
