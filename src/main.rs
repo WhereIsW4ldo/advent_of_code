@@ -1,8 +1,8 @@
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
-mod day8;
+mod day9;
 fn main() {
     let start = Instant::now();
-    day8::day8();
+    day9::day9();
     println!("Time elapsed: {:?}", start.elapsed());
 }
