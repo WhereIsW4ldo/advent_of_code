@@ -1,9 +1,9 @@
 use regex::Regex;
-use std::{fs, process::exit};
+use std::{fmt, fs, process::exit};
 extern crate queues;
 
 pub fn day9() {
-    let file_contents = read_file(true);
+    let file_contents = read_file(false);
 
     // println!("{file_contents}");
 
@@ -29,6 +29,8 @@ pub fn day9() {
         //     return;
         // }
     }
+
+    println!("{}", rope);
 
     println!("pos: {}", rope.visited_places.len());
 }
@@ -132,6 +134,7 @@ impl Rope {
     }
 
     pub fn move_head(&mut self, direction: char) {
+
         match direction {
             'L' => {
                 self.head.1 -= 1;
@@ -147,12 +150,13 @@ impl Rope {
             }
             _ => println!("this should not happen, wrong direction detected"),
         }
+        // println!("head: {},{}", self.head.0, self.head.1);
 
         self.move_tail();
+
     }
 
     pub fn move_tail_item(&mut self, index: usize) {
-
         if self.tail.get(index).unwrap().1 - self.tail.get(index - 1).unwrap().1 >= 2 {
             self.tail.get_mut(index - 1).unwrap().0 = self.tail.get(index).unwrap().0;
             self.tail.get_mut(index - 1).unwrap().1 = self.tail.get(index).unwrap().1 - 1;
@@ -206,6 +210,12 @@ impl Rope {
             add = true;
         }
 
+        
+
+        for index in (1..9).rev() {
+            // println!("index: {index}");
+            self.move_tail_item(index);
+        }
         if add {
             // add last just removed element to visited_places
             // let t = self.tail.remove(0);
@@ -215,11 +225,39 @@ impl Rope {
                 // println!("places: {:?}", &self.visited_places);
             }
         }
+    }
+}
 
-        for index in (1..9).rev() {
-            // println!("index: {index}");
-            self.move_tail_item(index);
+impl fmt::Display for Rope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        println!("head: {},{}", self.head.0, self.head.1);
+        println!("tail: {:?}", self.tail);
+        // 15 y+, -5 y-, 14 x+, -11 x-
+        let mut temp = String::new();
+        for y in (-5..15).rev() {
+            for x in -11..14 {
+                // if self.head.0 == y && self.head.1 == x {
+                //     temp += "H";
+                // } else if !self.tail.contains(&(y, x)) {
+                //     temp += ".";
+                // } else {
+                //     for (i, t) in self.tail.iter().enumerate() {
+                //         if t.0 == y && t.1 == x {
+                //             temp += &i.to_string();
+                //             break;
+                //         }
+                //     }
+                // }
+                if self.visited_places.contains(&(y, x)) {
+                    temp += "#";
+                }
+                else {
+                    temp += ".";
+                }
+            }
+            temp += "\n";
         }
+        write!(f, "{}\n\n", temp)
     }
 }
 
